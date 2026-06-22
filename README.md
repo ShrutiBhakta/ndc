@@ -238,9 +238,213 @@ STEP 14: Install Squid Package
 <img width="1919" height="1029" alt="Screenshot 2026-06-22 223811" src="https://github.com/user-attachments/assets/b1bfa1b3-5145-4aeb-93a1-ed3b9e43fb3c" />
 
 ---------------------------------------------------------------------
+STEP 16: Configure Squid Local Cache
 
-Result:
+Navigate to:
 
-pfSense firewall was successfully installed in VirtualBox. LAN interface was configured and web interface was accessed successfully. Required packages were installed using Package Manager.
+Services → Squid Proxy Server → Local Cache
+Configure the following values:
+Setting	Value
+Hard Disk Cache Size	100 MB
+Memory Cache Size	64 MB
+Cache Replacement Policy	Default
+Maximum Object Size	Default
+Minimum Object Size	Default
+Click Save.
 
 ---------------------------------------------------------------------
+
+STEP 17: Enable Squid Proxy
+
+Navigate to:
+
+Services → Squid Proxy Server → General
+Configure:
+Setting	Value
+Enable Squid Proxy	Enabled
+Proxy Interface	LAN
+Proxy Port	3128
+Click Save.
+Screenshot:
+
+Squid General Configuration
+
+---------------------------------------------------------------------
+
+STEP 18: Create User Account - shruti1 and shruti2
+
+Navigate to:
+
+System → User Manager → Users
+Click Add User.
+Configure:
+Field	Value
+Username	shruti1
+Password	shruti123
+Confirm Password	shruti123
+Full Name	Shruti User 1
+Click Save.
+similar for shruti2
+<img width="1919" height="1028" alt="Screenshot 2026-06-22 224742" src="https://github.com/user-attachments/assets/597c5853-ad83-4fc6-b3c1-2a88e04d2b37" />
+<img width="1919" height="1028" alt="Screenshot 2026-06-22 230059" src="https://github.com/user-attachments/assets/3c32a4f9-2c2b-4a13-90a3-a8e52da96a95" />
+<img width="1919" height="1030" alt="Screenshot 2026-06-22 230113" src="https://github.com/user-attachments/assets/5037673a-72c3-47ea-ab93-bd319d041a63" />
+<img width="1919" height="1032" alt="Screenshot 2026-06-22 224920" src="https://github.com/user-attachments/assets/14a96cda-913b-409a-b2d5-0f283f93d631" />
+
+---------------------------------------------------------------------
+
+STEP 19: Configure Squid Authentication
+
+Navigate to:
+
+Services → Squid Proxy Server → Authentication
+Configure:
+Setting	Value
+Authentication Method	Local Database
+Authentication Realm	pfSense
+Authentication Processes	5
+Enable Authentication	Enabled
+Click Save.
+
+<img width="1143" height="927" alt="Screenshot 2026-06-22 225208" src="https://github.com/user-attachments/assets/618aa8bd-24f3-4d68-b881-b3fd28ac641d" />
+
+---------------------------------------------------------------------
+
+STEP 20: Enable SquidGuard
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter → General Settings
+
+Check:
+
+Enable
+Click Save.
+Click Apply.
+<img width="1919" height="1031" alt="Screenshot 2026-06-22 224013" src="https://github.com/user-attachments/assets/63bb2b92-6319-4206-929b-3eba35c126d1" />
+
+---------------------------------------------------------------------
+
+STEP 21: Configure Common ACL
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter → Common ACL
+Leave default settings.
+Click Save.
+
+---------------------------------------------------------------------
+
+STEP 22: Create Group ACL for shruti1
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter → Groups ACL
+Click Add.
+Configure:
+Field	Value
+Group Name	shruti1
+Client Source	Authenticated Users
+User	shruti1
+Click Save.
+<img width="1919" height="1028" alt="Screenshot 2026-06-22 230059" src="https://github.com/user-attachments/assets/304394cc-b689-4135-a44e-de34083204af" />
+<img width="1919" height="1030" alt="Screenshot 2026-06-22 230113" src="https://github.com/user-attachments/assets/c857a525-47ed-4c97-877a-bc6beab6451c" />
+
+---------------------------------------------------------------------
+STEP 23: Apply SquidGuard Configuration
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter
+
+Click:
+
+Apply
+Wait for configuration reload.
+
+---------------------------------------------------------------------
+
+STEP 24: Configure Firefox Proxy Settings
+Open Firefox.
+
+Navigate to:
+
+Menu → Settings → Network Settings
+
+Click:
+
+Settings
+
+Select:
+
+Manual Proxy Configuration
+Configure:
+Field	Value
+HTTP Proxy	192.168.56.2
+Port	3128
+
+Enable:
+
+Use this proxy server for all protocols
+Click OK.
+<img width="1919" height="1079" alt="Screenshot 2026-06-23 005025" src="https://github.com/user-attachments/assets/4ce24d88-e69a-48b2-a2aa-9c4599989112" />
+
+---------------------------------------------------------------------
+
+STEP 25: Create Target Category for Social, shruti1, shruti2 websites
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter → Target Categories
+Click Add.
+Configure:
+Field	Value
+Name	social_media
+Description	Social Networking Websites
+
+Under Domain List, add:
+
+facebook.com
+instagram.com
+whatsapp.com
+Click Save.
+<img width="1919" height="1026" alt="Screenshot 2026-06-23 001727" src="https://github.com/user-attachments/assets/d5741611-cc4a-4133-91c1-c0f82e0258e3" />
+
+<img width="1916" height="1032" alt="Screenshot 2026-06-23 002100" src="https://github.com/user-attachments/assets/1bfdd95f-107e-42b8-86d1-c071c85c6576" />
+
+---------------------------------------------------------------------
+
+STEP 33: Configure Access Policy for shruti1
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter → Groups ACL
+
+Edit:
+
+shruti1
+Configure Access Rules:
+Category	Action
+social_media	Allow
+educational_sites	Deny
+common_sites	Allow
+Click Save.
+<img width="1919" height="1036" alt="Screenshot 2026-06-23 002314" src="https://github.com/user-attachments/assets/4856341b-e25e-4217-b398-28180f383e36" />
+
+---------------------------------------------------------------------
+STEP 38: Apply SquidGuard Configuration
+
+Navigate to:
+
+Services → SquidGuard Proxy Filter
+
+Click:
+<img width="1411" height="830" alt="Screenshot 2026-06-22 234430" src="https://github.com/user-attachments/assets/702011b7-cf23-42c8-ad46-54c79090e300" />
+
+---------------------------------------------------------------------
+
+STEP 39: Test Access Using all Users 
+
+<img width="1919" height="1077" alt="Screenshot 2026-06-23 003437" src="https://github.com/user-attachments/assets/864c1d9e-5cef-4d9a-abbe-8c0cfdd1d042" />
+<img width="1919" height="1079" alt="Screenshot 2026-06-23 005201" src="https://github.com/user-attachments/assets/1a1baee2-06f2-4ffa-b16d-a13c0c299b36" />
+<img width="1919" height="1079" alt="Screenshot 2026-06-23 005247" src="https://github.com/user-attachments/assets/b47263dd-0913-4e93-a763-e51774974e2f" />
+<img width="1919" height="1079" alt="Screenshot 2026-06-23 005421" src="https://github.com/user-attachments/assets/a92dce8e-3b88-4ab4-80c7-2679eb31efc0" />
